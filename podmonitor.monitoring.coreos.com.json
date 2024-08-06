@@ -24,18 +24,47 @@
     "spec": {
       "type": "object",
       "properties": {
+        "jobLabel": { "type": "string" },
+        "targetLabels": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "podTargetLabels": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "sampleLimit": { "type": "integer" },
+        "labelLimit": { "type": "integer" },
+        "labelNameLengthLimit": { "type": "integer" },
+        "labelValueLengthLimit": { "type": "integer" },
         "selector": {
           "type": "object",
           "properties": {
             "matchLabels": { "type": "object" },
-            "matchExpressions": { "type": "array" }
+            "matchExpressions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "key": { "type": "string" },
+                  "operator": { "type": "string" },
+                  "values": {
+                    "type": "array",
+                    "items": { "type": "string" }
+                  }
+                }
+              }
+            }
           }
         },
         "namespaceSelector": {
           "type": "object",
           "properties": {
             "any": { "type": "boolean" },
-            "matchNames": { "type": "array" }
+            "matchNames": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
           }
         },
         "podMetricsEndpoints": {
@@ -46,19 +75,61 @@
               "port": { "type": "string" },
               "path": { "type": "string" },
               "scheme": { "type": "string" },
-              "interval": { "type": "string" },
+              "params": { "type": "object" },
               "scrapeTimeout": { "type": "string" },
-              "params": { "type": "object" }
+              "interval": { "type": "string" },
+              "metricRelabelings": {
+                "type": "array",
+                "items": { "$ref": "#/definitions/relabelConfig" }
+              },
+              "relabelings": {
+                "type": "array",
+                "items": { "$ref": "#/definitions/relabelConfig" }
+              },
+              "tlsConfig": { "$ref": "#/definitions/tlsConfig" },
+              "bearerTokenFile": { "type": "string" },
+              "bearerTokenSecret": { "type": "object" },
+              "basicAuth": { "$ref": "#/definitions/basicAuth" },
+              "proxyUrl": { "type": "string" }
             }
           }
-        },
-        "sampleLimit": { "type": "integer" },
-        "targetLabels": { "type": "array" },
-        "labelLimit": { "type": "integer" },
-        "labelNameLengthLimit": { "type": "integer" },
-        "labelValueLengthLimit": { "type": "integer" }
+        }
       }
     }
   },
-  "required": ["apiVersion", "kind", "metadata", "spec"]
+  "required": ["apiVersion", "kind", "metadata", "spec"],
+  "definitions": {
+    "relabelConfig": {
+      "type": "object",
+      "properties": {
+        "sourceLabels": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "separator": { "type": "string" },
+        "targetLabel": { "type": "string" },
+        "regex": { "type": "string" },
+        "modulus": { "type": "integer" },
+        "replacement": { "type": "string" },
+        "action": { "type": "string" }
+      }
+    },
+    "tlsConfig": {
+      "type": "object",
+      "properties": {
+        "caFile": { "type": "string" },
+        "certFile": { "type": "string" },
+        "keyFile": { "type": "string" },
+        "serverName": { "type": "string" },
+        "insecureSkipVerify": { "type": "boolean" }
+      }
+    },
+    "basicAuth": {
+      "type": "object",
+      "properties": {
+        "username": { "type": "string" },
+        "password": { "type": "string" }
+      }
+    }
+  }
 }

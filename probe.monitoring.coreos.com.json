@@ -25,29 +25,68 @@
       "type": "object",
       "properties": {
         "jobName": { "type": "string" },
-        "prober": {
-          "type": "object",
-          "properties": {
-            "url": { "type": "string" }
-          }
-        },
+        "interval": { "type": "string" },
+        "scrapeTimeout": { "type": "string" },
+        "module": { "type": "string" },
         "targets": {
           "type": "object",
           "properties": {
             "staticConfig": {
               "type": "object",
               "properties": {
-                "targets": { "type": "array" },
+                "targets": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                },
                 "labels": { "type": "object" }
+              }
+            },
+            "ingress": {
+              "type": "object",
+              "properties": {
+                "selector": { "type": "object" },
+                "namespaceSelector": { "type": "object" },
+                "relabelingConfigs": {
+                  "type": "array",
+                  "items": { "$ref": "#/definitions/relabelConfig" }
+                }
               }
             }
           }
         },
-        "interval": { "type": "string" },
-        "scrapeTimeout": { "type": "string" },
-        "module": { "type": "string" }
+        "prober": {
+          "type": "object",
+          "properties": {
+            "url": { "type": "string" }
+          }
+        },
+        "relabelingConfigs": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/relabelConfig" }
+        },
+        "metricRelabelingConfigs": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/relabelConfig" }
+        }
       }
     }
   },
-  "required": ["apiVersion", "kind", "metadata", "spec"]
+  "required": ["apiVersion", "kind", "metadata", "spec"],
+  "definitions": {
+    "relabelConfig": {
+      "type": "object",
+      "properties": {
+        "sourceLabels": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "separator": { "type": "string" },
+        "targetLabel": { "type": "string" },
+        "regex": { "type": "string" },
+        "modulus": { "type": "integer" },
+        "replacement": { "type": "string" },
+        "action": { "type": "string" }
+      }
+    }
+  }
 }
