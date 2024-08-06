@@ -1,0 +1,128 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AppProject",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "type": "string",
+      "enum": ["argoproj.io/v1alpha1"]
+    },
+    "kind": {
+      "type": "string",
+      "enum": ["AppProject"]
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "namespace": { "type": "string" },
+        "labels": { "type": "object" },
+        "annotations": { "type": "object" }
+      },
+      "required": ["name"]
+    },
+    "spec": {
+      "type": "object",
+      "properties": {
+        "description": { "type": "string" },
+        "sourceRepos": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "destinations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "server": { "type": "string" },
+              "namespace": { "type": "string" }
+            }
+          }
+        },
+        "clusterResourceWhitelist": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "group": { "type": "string" },
+              "kind": { "type": "string" }
+            }
+          }
+        },
+        "clusterResourceBlacklist": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "group": { "type": "string" },
+              "kind": { "type": "string" }
+            }
+          }
+        },
+        "namespaceResourceWhitelist": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "group": { "type": "string" },
+              "kind": { "type": "string" }
+            }
+          }
+        },
+        "namespaceResourceBlacklist": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "group": { "type": "string" },
+              "kind": { "type": "string" }
+            }
+          }
+        },
+        "roles": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "policies": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "groups": {
+                "type": "array",
+                "items": { "type": "string" }
+              }
+            }
+          }
+        },
+        "syncWindows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "kind": { "type": "string" },
+              "schedule": { "type": "string" },
+              "duration": { "type": "string" },
+              "applications": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "namespaces": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "clusters": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "manualSync": { "type": "boolean" }
+            }
+          }
+        },
+        "description": { "type": "string" }
+      }
+    }
+  },
+  "required": ["apiVersion", "kind", "metadata", "spec"]
+}

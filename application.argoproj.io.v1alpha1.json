@@ -1,0 +1,127 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Application",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "type": "string",
+      "enum": ["argoproj.io/v1alpha1"]
+    },
+    "kind": {
+      "type": "string",
+      "enum": ["Application"]
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "namespace": { "type": "string" },
+        "labels": { "type": "object" },
+        "annotations": { "type": "object" }
+      },
+      "required": ["name"]
+    },
+    "spec": {
+      "type": "object",
+      "properties": {
+        "project": { "type": "string" },
+        "source": {
+          "type": "object",
+          "properties": {
+            "repoURL": { "type": "string" },
+            "path": { "type": "string" },
+            "targetRevision": { "type": "string" },
+            "chart": { "type": "string" },
+            "helm": {
+              "type": "object",
+              "properties": {
+                "valueFiles": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                },
+                "parameters": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": { "type": "string" },
+                      "value": { "type": "string" }
+                    }
+                  }
+                }
+              }
+            },
+            "kustomize": {
+              "type": "object",
+              "properties": {
+                "namePrefix": { "type": "string" },
+                "images": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                },
+                "commonLabels": { "type": "object" },
+                "commonAnnotations": { "type": "object" },
+                "version": { "type": "string" }
+              }
+            },
+            "directory": {
+              "type": "object",
+              "properties": {
+                "recurse": { "type": "boolean" },
+                "jsonnet": {
+                  "type": "object",
+                  "properties": {
+                    "extVars": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": { "type": "string" },
+                          "value": { "type": "string" }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "destination": {
+          "type": "object",
+          "properties": {
+            "server": { "type": "string" },
+            "namespace": { "type": "string" }
+          }
+        },
+        "syncPolicy": {
+          "type": "object",
+          "properties": {
+            "automated": {
+              "type": "object",
+              "properties": {
+                "prune": { "type": "boolean" },
+                "selfHeal": { "type": "boolean" }
+              }
+            },
+            "retry": {
+              "type": "object",
+              "properties": {
+                "limit": { "type": "integer" },
+                "backoff": {
+                  "type": "object",
+                  "properties": {
+                    "duration": { "type": "string" },
+                    "factor": { "type": "number" },
+                    "maxDuration": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "required": ["apiVersion", "kind", "metadata", "spec"]
+}

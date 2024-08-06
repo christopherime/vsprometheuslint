@@ -1,0 +1,153 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ApplicationSet",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "type": "string",
+      "enum": ["argoproj.io/v1alpha1"]
+    },
+    "kind": {
+      "type": "string",
+      "enum": ["ApplicationSet"]
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "namespace": { "type": "string" },
+        "labels": { "type": "object" },
+        "annotations": { "type": "object" }
+      },
+      "required": ["name"]
+    },
+    "spec": {
+      "type": "object",
+      "properties": {
+        "generators": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "list": {
+                "type": "object",
+                "properties": {
+                  "elements": {
+                    "type": "array",
+                    "items": { "type": "object" }
+                  }
+                }
+              },
+              "clusters": { "type": "object" },
+              "git": {
+                "type": "object",
+                "properties": {
+                  "repoURL": { "type": "string" },
+                  "revision": { "type": "string" },
+                  "directories": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "path": { "type": "string" }
+                      }
+                    }
+                  },
+                  "files": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "path": { "type": "string" }
+                      }
+                    }
+                  }
+                }
+              },
+              "matrix": {
+                "type": "object",
+                "properties": {
+                  "generators": {
+                    "type": "array",
+                    "items": { "type": "object" }
+                  }
+                }
+              },
+              "merge": {
+                "type": "object",
+                "properties": {
+                  "generators": {
+                    "type": "array",
+                    "items": { "type": "object" }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "template": {
+          "type": "object",
+          "properties": {
+            "metadata": {
+              "type": "object",
+              "properties": {
+                "name": { "type": "string" },
+                "namespace": { "type": "string" },
+                "labels": { "type": "object" },
+                "annotations": { "type": "object" }
+              }
+            },
+            "spec": {
+              "type": "object",
+              "properties": {
+                "project": { "type": "string" },
+                "source": {
+                  "type": "object",
+                  "properties": {
+                    "repoURL": { "type": "string" },
+                    "path": { "type": "string" },
+                    "targetRevision": { "type": "string" }
+                  }
+                },
+                "destination": {
+                  "type": "object",
+                  "properties": {
+                    "server": { "type": "string" },
+                    "namespace": { "type": "string" }
+                  }
+                },
+                "syncPolicy": {
+                  "type": "object",
+                  "properties": {
+                    "automated": {
+                      "type": "object",
+                      "properties": {
+                        "prune": { "type": "boolean" },
+                        "selfHeal": { "type": "boolean" }
+                      }
+                    },
+                    "retry": {
+                      "type": "object",
+                      "properties": {
+                        "limit": { "type": "integer" },
+                        "backoff": {
+                          "type": "object",
+                          "properties": {
+                            "duration": { "type": "string" },
+                            "factor": { "type": "number" },
+                            "maxDuration": { "type": "string" }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "required": ["apiVersion", "kind", "metadata", "spec"]
+}
