@@ -1,0 +1,64 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "PodMonitor",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "type": "string",
+      "enum": ["monitoring.coreos.com/v1"]
+    },
+    "kind": {
+      "type": "string",
+      "enum": ["PodMonitor"]
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "namespace": { "type": "string" },
+        "labels": { "type": "object" },
+        "annotations": { "type": "object" }
+      },
+      "required": ["name"]
+    },
+    "spec": {
+      "type": "object",
+      "properties": {
+        "selector": {
+          "type": "object",
+          "properties": {
+            "matchLabels": { "type": "object" },
+            "matchExpressions": { "type": "array" }
+          }
+        },
+        "namespaceSelector": {
+          "type": "object",
+          "properties": {
+            "any": { "type": "boolean" },
+            "matchNames": { "type": "array" }
+          }
+        },
+        "podMetricsEndpoints": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "port": { "type": "string" },
+              "path": { "type": "string" },
+              "scheme": { "type": "string" },
+              "interval": { "type": "string" },
+              "scrapeTimeout": { "type": "string" },
+              "params": { "type": "object" }
+            }
+          }
+        },
+        "sampleLimit": { "type": "integer" },
+        "targetLabels": { "type": "array" },
+        "labelLimit": { "type": "integer" },
+        "labelNameLengthLimit": { "type": "integer" },
+        "labelValueLengthLimit": { "type": "integer" }
+      }
+    }
+  },
+  "required": ["apiVersion", "kind", "metadata", "spec"]
+}

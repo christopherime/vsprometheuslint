@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ThanosRuler",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "type": "string",
+      "enum": ["monitoring.coreos.com/v1"]
+    },
+    "kind": {
+      "type": "string",
+      "enum": ["ThanosRuler"]
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "namespace": { "type": "string" },
+        "labels": { "type": "object" },
+        "annotations": { "type": "object" }
+      },
+      "required": ["name"]
+    },
+    "spec": {
+      "type": "object",
+      "properties": {
+        "replicas": { "type": "integer" },
+        "version": { "type": "string" },
+        "evaluationInterval": { "type": "string" },
+        "externalLabels": { "type": "object" },
+        "queryEndpoints": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "alertmanagersConfig": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "staticConfig": {
+                "type": "object",
+                "properties": {
+                  "targets": { "type": "array" }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "required": ["apiVersion", "kind", "metadata", "spec"]
+}

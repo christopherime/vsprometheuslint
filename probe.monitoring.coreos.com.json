@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Probe",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "type": "string",
+      "enum": ["monitoring.coreos.com/v1"]
+    },
+    "kind": {
+      "type": "string",
+      "enum": ["Probe"]
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "namespace": { "type": "string" },
+        "labels": { "type": "object" },
+        "annotations": { "type": "object" }
+      },
+      "required": ["name"]
+    },
+    "spec": {
+      "type": "object",
+      "properties": {
+        "jobName": { "type": "string" },
+        "prober": {
+          "type": "object",
+          "properties": {
+            "url": { "type": "string" }
+          }
+        },
+        "targets": {
+          "type": "object",
+          "properties": {
+            "staticConfig": {
+              "type": "object",
+              "properties": {
+                "targets": { "type": "array" },
+                "labels": { "type": "object" }
+              }
+            }
+          }
+        },
+        "interval": { "type": "string" },
+        "scrapeTimeout": { "type": "string" },
+        "module": { "type": "string" }
+      }
+    }
+  },
+  "required": ["apiVersion", "kind", "metadata", "spec"]
+}

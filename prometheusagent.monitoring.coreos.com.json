@@ -1,0 +1,63 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "PrometheusAgent",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "type": "string",
+      "enum": ["monitoring.coreos.com/v1"]
+    },
+    "kind": {
+      "type": "string",
+      "enum": ["PrometheusAgent"]
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "namespace": { "type": "string" },
+        "labels": { "type": "object" },
+        "annotations": { "type": "object" }
+      },
+      "required": ["name"]
+    },
+    "spec": {
+      "type": "object",
+      "properties": {
+        "scrapeInterval": { "type": "string" },
+        "evaluationInterval": { "type": "string" },
+        "scrape_configs": {
+          "type": "array",
+          "items": {
+            "$ref": "https://raw.githubusercontent.com/christopherime/vsprometheuslint/main/scrapeconfig.json#/properties/spec"
+          }
+        },
+        "externalLabels": { "type": "object" },
+        "alertmanagers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "scheme": { "type": "string" },
+              "static_configs": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "targets": {
+                      "type": "array",
+                      "items": { "type": "string" }
+                    },
+                    "labels": { "type": "object" }
+                  }
+                }
+              },
+              "tls_config": { "type": "object" }
+            }
+          }
+        }
+      }
+    }
+  },
+  "required": ["apiVersion", "kind", "metadata", "spec"]
+}

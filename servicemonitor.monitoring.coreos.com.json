@@ -1,0 +1,60 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ServiceMonitor",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "type": "string",
+      "enum": ["monitoring.coreos.com/v1"]
+    },
+    "kind": {
+      "type": "string",
+      "enum": ["ServiceMonitor"]
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "namespace": { "type": "string" },
+        "labels": { "type": "object" },
+        "annotations": { "type": "object" }
+      },
+      "required": ["name"]
+    },
+    "spec": {
+      "type": "object",
+      "properties": {
+        "endpoints": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "port": { "type": "string" },
+              "path": { "type": "string" },
+              "scheme": { "type": "string" },
+              "interval": { "type": "string" },
+              "scrapeTimeout": { "type": "string" }
+            }
+          }
+        },
+        "selector": {
+          "type": "object",
+          "properties": {
+            "matchLabels": { "type": "object" },
+            "matchExpressions": { "type": "array" }
+          }
+        },
+        "namespaceSelector": {
+          "type": "object",
+          "properties": {
+            "matchNames": { "type": "array" }
+          }
+        },
+        "jobLabel": { "type": "string" },
+        "targetLabels": { "type": "array" },
+        "podTargetLabels": { "type": "array" }
+      }
+    }
+  },
+  "required": ["apiVersion", "kind", "metadata", "spec"]
+}
