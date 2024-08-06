@@ -5,42 +5,341 @@
   "properties": {
     "apiVersion": {
       "type": "string",
-      "enum": ["monitoring.coreos.com/v1"]
+      "description": "APIVersion defines the versioned schema of this representation of an object."
     },
     "kind": {
       "type": "string",
-      "enum": ["ThanosRuler"]
+      "description": "Kind is a string value representing the REST resource this object represents."
     },
     "metadata": {
       "type": "object",
       "properties": {
-        "name": { "type": "string" },
-        "namespace": { "type": "string" },
-        "labels": { "type": "object" },
-        "annotations": { "type": "object" }
-      },
-      "required": ["name"]
+        "name": {
+          "type": "string",
+          "description": "Name of the ThanosRuler"
+        },
+        "namespace": {
+          "type": "string",
+          "description": "Namespace of the ThanosRuler"
+        },
+        "labels": {
+          "type": "object",
+          "patternProperties": {
+            "^[a-zA-Z0-9_]+$": {
+              "type": "string"
+            }
+          },
+          "description": "Labels for the ThanosRuler"
+        },
+        "annotations": {
+          "type": "object",
+          "patternProperties": {
+            "^[a-zA-Z0-9_]+$": {
+              "type": "string"
+            }
+          },
+          "description": "Annotations for the ThanosRuler"
+        }
+      }
     },
     "spec": {
       "type": "object",
       "properties": {
-        "replicas": { "type": "integer" },
-        "version": { "type": "string" },
-        "evaluationInterval": { "type": "string" },
-        "externalLabels": { "type": "object" },
-        "queryEndpoints": {
-          "type": "array",
-          "items": { "type": "string" }
+        "alertManagersURL": {
+          "type": "string",
+          "description": "AlertManagersURL is the URL of the Alertmanager cluster to send alerts to."
         },
-        "alertmanagersConfig": {
+        "alertQueryURL": {
+          "type": "string",
+          "description": "AlertQueryURL is the URL to query for alerts."
+        },
+        "alertmanagerConfigs": {
           "type": "array",
           "items": {
             "type": "object",
             "properties": {
-              "staticConfig": {
+              "name": {
+                "type": "string",
+                "description": "Name of the AlertmanagerConfig"
+              },
+              "namespace": {
+                "type": "string",
+                "description": "Namespace of the AlertmanagerConfig"
+              },
+              "labels": {
+                "type": "object",
+                "patternProperties": {
+                  "^[a-zA-Z0-9_]+$": {
+                    "type": "string"
+                  }
+                },
+                "description": "Labels for the AlertmanagerConfig"
+              },
+              "annotations": {
+                "type": "object",
+                "patternProperties": {
+                  "^[a-zA-Z0-9_]+$": {
+                    "type": "string"
+                  }
+                },
+                "description": "Annotations for the AlertmanagerConfig"
+              }
+            }
+          }
+        },
+        "evaluationInterval": {
+          "type": "string",
+          "description": "EvaluationInterval is the interval at which rules are evaluated."
+        },
+        "externalLabels": {
+          "type": "object",
+          "patternProperties": {
+            "^[a-zA-Z0-9_]+$": {
+              "type": "string"
+            }
+          },
+          "description": "ExternalLabels is a set of labels to attach to all metrics collected by this Thanos Ruler."
+        },
+        "image": {
+          "type": "string",
+          "description": "Image to use for Thanos Ruler."
+        },
+        "listenLocal": {
+          "type": "boolean",
+          "description": "ListenLocal makes the Thanos ruler listen on loopback."
+        },
+        "logLevel": {
+          "type": "string",
+          "description": "LogLevel is the log level for Thanos Ruler."
+        },
+        "paused": {
+          "type": "boolean",
+          "description": "Paused is whether the Thanos Ruler is paused from processing changes."
+        },
+        "podMetadata": {
+          "type": "object",
+          "properties": {
+            "labels": {
+              "type": "object",
+              "patternProperties": {
+                "^[a-zA-Z0-9_]+$": {
+                  "type": "string"
+                }
+              },
+              "description": "Labels for the pod."
+            },
+            "annotations": {
+              "type": "object",
+              "patternProperties": {
+                "^[a-zA-Z0-9_]+$": {
+                  "type": "string"
+                }
+              },
+              "description": "Annotations for the pod."
+            }
+          }
+        },
+        "replicas": {
+          "type": "integer",
+          "description": "Replicas is the number of replicas to deploy for a Thanos Ruler deployment."
+        },
+        "resources": {
+          "type": "object",
+          "properties": {
+            "limits": {
+              "type": "object",
+              "patternProperties": {
+                "^[a-zA-Z0-9_]+$": {
+                  "type": "string"
+                }
+              },
+              "description": "Resource limits for the Thanos Ruler container."
+            },
+            "requests": {
+              "type": "object",
+              "patternProperties": {
+                "^[a-zA-Z0-9_]+$": {
+                  "type": "string"
+                }
+              },
+              "description": "Resource requests for the Thanos Ruler container."
+            }
+          }
+        },
+        "ruleNamespaceSelector": {
+          "type": "object",
+          "properties": {
+            "matchNames": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "MatchNames is a list of namespace names to match."
+            },
+            "any": {
+              "type": "boolean",
+              "description": "Any determines if all namespaces are selected."
+            }
+          }
+        },
+        "ruleSelector": {
+          "type": "object",
+          "properties": {
+            "matchLabels": {
+              "type": "object",
+              "patternProperties": {
+                "^[a-zA-Z0-9_]+$": {
+                  "type": "string"
+                }
+              },
+              "description": "MatchLabels is a map of {key,value} pairs."
+            },
+            "matchExpressions": {
+              "type": "array",
+              "items": {
                 "type": "object",
                 "properties": {
-                  "targets": { "type": "array" }
+                  "key": {
+                    "type": "string"
+                  },
+                  "operator": {
+                    "type": "string",
+                    "enum": ["In", "NotIn", "Exists", "DoesNotExist"]
+                  },
+                  "values": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "securityContext": {
+          "type": "object",
+          "properties": {
+            "runAsUser": {
+              "type": "integer",
+              "description": "The UID to run the entrypoint of the container process."
+            },
+            "runAsGroup": {
+              "type": "integer",
+              "description": "The GID to run the entrypoint of the container process."
+            }
+          }
+        },
+        "storage": {
+          "type": "object",
+          "properties": {
+            "volumeClaimTemplate": {
+              "type": "object",
+              "properties": {
+                "spec": {
+                  "type": "object",
+                  "properties": {
+                    "accessModes": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "resources": {
+                      "type": "object",
+                      "properties": {
+                        "requests": {
+                          "type": "object",
+                          "properties": {
+                            "storage": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "timeout": {
+          "type": "string",
+          "description": "Timeout is the duration after which the Thanos Ruler will be shut down."
+        },
+        "tolerations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "key": {
+                "type": "string"
+              },
+              "operator": {
+                "type": "string",
+                "enum": ["Exists", "Equal"]
+              },
+              "value": {
+                "type": "string"
+              },
+              "effect": {
+                "type": "string",
+                "enum": ["NoSchedule", "PreferNoSchedule", "NoExecute"]
+              },
+              "tolerationSeconds": {
+                "type": "integer"
+              }
+            }
+          }
+        },
+        "topologySpreadConstraints": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "maxSkew": {
+                "type": "integer"
+              },
+              "topologyKey": {
+                "type": "string"
+              },
+              "whenUnsatisfiable": {
+                "type": "string",
+                "enum": ["DoNotSchedule", "ScheduleAnyway"]
+              },
+              "labelSelector": {
+                "type": "object",
+                "properties": {
+                  "matchLabels": {
+                    "type": "object",
+                    "patternProperties": {
+                      "^[a-zA-Z0-9_]+$": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "matchExpressions": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "key": {
+                          "type": "string"
+                        },
+                        "operator": {
+                          "type": "string",
+                          "enum": ["In", "NotIn", "Exists", "DoesNotExist"]
+                        },
+                        "values": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -49,5 +348,5 @@
       }
     }
   },
-  "required": ["apiVersion", "kind", "metadata", "spec"]
+  "required": ["metadata", "spec"]
 }
