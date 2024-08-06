@@ -1,0 +1,414 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AlertmanagerConfig",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "type": "string",
+      "enum": ["monitoring.coreos.com/v1alpha1"]
+    },
+    "kind": {
+      "type": "string",
+      "enum": ["AlertmanagerConfig"]
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "namespace": { "type": "string" },
+        "labels": { "type": "object" },
+        "annotations": { "type": "object" }
+      },
+      "required": ["name"]
+    },
+    "spec": {
+      "type": "object",
+      "properties": {
+        "route": {
+          "type": "object",
+          "properties": {
+            "receiver": { "type": "string" },
+            "groupBy": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "groupWait": { "type": "string" },
+            "groupInterval": { "type": "string" },
+            "repeatInterval": { "type": "string" },
+            "routes": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/route" }
+            },
+            "continue": { "type": "boolean" },
+            "match": { "type": "object" },
+            "match_re": { "type": "object" }
+          }
+        },
+        "receivers": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/receiver" }
+        },
+        "inhibitRules": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/inhibitRule" }
+        },
+        "muteTimeIntervals": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/muteTimeInterval" }
+        }
+      }
+    }
+  },
+  "required": ["apiVersion", "kind", "metadata", "spec"],
+  "definitions": {
+    "route": {
+      "type": "object",
+      "properties": {
+        "receiver": { "type": "string" },
+        "groupBy": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "groupWait": { "type": "string" },
+        "groupInterval": { "type": "string" },
+        "repeatInterval": { "type": "string" },
+        "routes": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/route" }
+        },
+        "continue": { "type": "boolean" },
+        "match": { "type": "object" },
+        "match_re": { "type": "object" }
+      }
+    },
+    "receiver": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "emailConfigs": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/emailConfig" }
+        },
+        "pagerdutyConfigs": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/pagerdutyConfig" }
+        },
+        "slackConfigs": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/slackConfig" }
+        },
+        "webhookConfigs": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/webhookConfig" }
+        },
+        "opsgenieConfigs": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/opsgenieConfig" }
+        },
+        "wechatConfigs": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/wechatConfig" }
+        },
+        "victoropsConfigs": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/victoropsConfig" }
+        },
+        "pushoverConfigs": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/pushoverConfig" }
+        }
+      }
+    },
+    "inhibitRule": {
+      "type": "object",
+      "properties": {
+        "sourceMatch": { "type": "object" },
+        "sourceMatchRE": { "type": "object" },
+        "targetMatch": { "type": "object" },
+        "targetMatchRE": { "type": "object" },
+        "equal": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "muteTimeInterval": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "timeIntervals": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/timeInterval" }
+        }
+      }
+    },
+    "timeInterval": {
+      "type": "object",
+      "properties": {
+        "times": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/timeRange" }
+        },
+        "weekdays": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+          }
+        },
+        "dates": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/dateRange" }
+        },
+        "locations": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "timeRange": {
+      "type": "object",
+      "properties": {
+        "startTime": { "type": "string" },
+        "endTime": { "type": "string" }
+      }
+    },
+    "dateRange": {
+      "type": "object",
+      "properties": {
+        "startDate": { "type": "string" },
+        "endDate": { "type": "string" }
+      }
+    },
+    "emailConfig": {
+      "type": "object",
+      "properties": {
+        "to": { "type": "string" },
+        "from": { "type": "string" },
+        "smarthost": { "type": "string" },
+        "authUsername": { "type": "string" },
+        "authPassword": { "type": "string" },
+        "authIdentity": { "type": "string" },
+        "authSecret": { "type": "string" },
+        "tlsConfig": { "$ref": "#/definitions/tlsConfig" },
+        "headers": { "type": "object" },
+        "html": { "type": "string" },
+        "text": { "type": "string" },
+        "requireTLS": { "type": "boolean" },
+        "sendResolved": { "type": "boolean" }
+      }
+    },
+    "pagerdutyConfig": {
+      "type": "object",
+      "properties": {
+        "serviceKey": { "type": "string" },
+        "routingKey": { "type": "string" },
+        "url": { "type": "string" },
+        "client": { "type": "string" },
+        "clientURL": { "type": "string" },
+        "description": { "type": "string" },
+        "severity": { "type": "string" },
+        "class": { "type": "string" },
+        "group": { "type": "string" },
+        "component": { "type": "string" },
+        "details": { "type": "object" },
+        "images": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/pagerdutyImage" }
+        },
+        "links": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/pagerdutyLink" }
+        },
+        "sendResolved": { "type": "boolean" }
+      }
+    },
+    "pagerdutyImage": {
+      "type": "object",
+      "properties": {
+        "src": { "type": "string" },
+        "href": { "type": "string" },
+        "alt": { "type": "string" }
+      }
+    },
+    "pagerdutyLink": {
+      "type": "object",
+      "properties": {
+        "href": { "type": "string" },
+        "text": { "type": "string" }
+      }
+    },
+    "slackConfig": {
+      "type": "object",
+      "properties": {
+        "apiURL": { "type": "string" },
+        "channel": { "type": "string" },
+        "username": { "type": "string" },
+        "color": { "type": "string" },
+        "title": { "type": "string" },
+        "titleLink": { "type": "string" },
+        "pretext": { "type": "string" },
+        "text": { "type": "string" },
+        "fields": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/slackField" }
+        },
+        "shortFields": { "type": "boolean" },
+        "footer": { "type": "string" },
+        "fallback": { "type": "string" },
+        "callbackID": { "type": "string" },
+        "iconEmoji": { "type": "string" },
+        "iconURL": { "type": "string" },
+        "linkNames": { "type": "boolean" },
+        "actions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/slackAction" }
+        },
+        "sendResolved": { "type": "boolean" }
+      }
+    },
+    "slackField": {
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "value": { "type": "string" },
+        "short": { "type": "boolean" }
+      }
+    },
+    "slackAction": {
+      "type": "object",
+      "properties": {
+        "type": { "type": "string" },
+        "text": { "type": "string" },
+        "url": { "type": "string" },
+        "style": { "type": "string" },
+        "name": { "type": "string" },
+        "value": { "type": "string" },
+        "confirm": {
+          "type": "object",
+          "properties": {
+            "text": { "type": "string" },
+            "title": { "type": "string" },
+            "okText": { "type": "string" },
+            "dismissText": { "type": "string" }
+          }
+        }
+      }
+    },
+    "webhookConfig": {
+      "type": "object",
+      "properties": {
+        "url": { "type": "string" },
+        "httpConfig": { "$ref": "#/definitions/httpConfig" },
+        "maxAlerts": { "type": "integer" },
+        "sendResolved": { "type": "boolean" }
+      }
+    },
+    "opsgenieConfig": {
+      "type": "object",
+      "properties": {
+        "apiKey": { "type": "string" },
+        "apiURL": { "type": "string" },
+        "message": { "type": "string" },
+        "description": { "type": "string" },
+        "source": { "type": "string" },
+        "details": { "type": "object" },
+        "tags": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "note": { "type": "string" },
+        "priority": { "type": "string" },
+        "responders": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/opsgenieResponder" }
+        },
+        "sendResolved": { "type": "boolean" }
+      }
+    },
+    "opsgenieResponder": {
+      "type": "object",
+      "properties": {
+        "type": { "type": "string" },
+        "id": { "type": "string" },
+        "name": { "type": "string" }
+      }
+    },
+    "wechatConfig": {
+      "type": "object",
+      "properties": {
+        "apiSecret": { "type": "string" },
+        "apiURL": { "type": "string" },
+        "corpID": { "type": "string" },
+        "agentID": { "type": "string" },
+        "toUser": { "type": "string" },
+        "toParty": { "type": "string" },
+        "toTag": { "type": "string" },
+        "message": { "type": "string" },
+        "sendResolved": { "type": "boolean" }
+      }
+    },
+    "victoropsConfig": {
+      "type": "object",
+      "properties": {
+        "apiKey": { "type": "string" },
+        "apiURL": { "type": "string" },
+        "routingKey": { "type": "string" },
+        "messageType": { "type": "string" },
+        "entityDisplayName": { "type": "string" },
+        "stateMessage": { "type": "string" },
+        "monitoringTool": { "type": "string" },
+        "customFields": { "type": "object" },
+        "sendResolved": { "type": "boolean" }
+      }
+    },
+    "pushoverConfig": {
+      "type": "object",
+      "properties": {
+        "userKey": { "type": "string" },
+        "token": { "type": "string" },
+        "title": { "type": "string" },
+        "message": { "type": "string" },
+        "url": { "type": "string" },
+        "urlTitle": { "type": "string" },
+        "sound": { "type": "string" },
+        "priority": { "type": "string" },
+        "retry": { "type": "string" },
+        "expire": { "type": "string" },
+        "html": { "type": "boolean" },
+        "sendResolved": { "type": "boolean" }
+      }
+    },
+    "tlsConfig": {
+      "type": "object",
+      "properties": {
+        "caFile": { "type": "string" },
+        "certFile": { "type": "string" },
+        "keyFile": { "type": "string" },
+        "serverName": { "type": "string" },
+        "insecureSkipVerify": { "type": "boolean" }
+      }
+    },
+    "httpConfig": {
+      "type": "object",
+      "properties": {
+        "proxyURL": { "type": "string" },
+        "basicAuth": {
+          "type": "object",
+          "properties": {
+            "username": { "type": "string" },
+            "password": { "type": "string" }
+          }
+        },
+        "authorization": {
+          "type": "object",
+          "properties": {
+            "type": { "type": "string" },
+            "credentials": { "type": "string" }
+          }
+        },
+        "tlsConfig": { "$ref": "#/definitions/tlsConfig" }
+      }
+    }
+  }
+}

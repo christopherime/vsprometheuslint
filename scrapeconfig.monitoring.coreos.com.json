@@ -25,38 +25,293 @@
       "type": "object",
       "properties": {
         "job_name": { "type": "string" },
+        "honor_labels": { "type": "boolean" },
+        "honor_timestamps": { "type": "boolean" },
+        "params": { "type": "object" },
+        "scrape_interval": { "type": "string" },
+        "scrape_timeout": { "type": "string" },
         "metrics_path": { "type": "string" },
-        "static_configs": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "targets": {
-                "type": "array",
-                "items": { "type": "string" }
-              },
-              "labels": { "type": "object" }
-            }
-          }
-        },
+        "scheme": { "type": "string" },
+        "body_size_limit": { "type": "string" },
+        "sample_limit": { "type": "integer" },
+        "target_limit": { "type": "integer" },
+        "label_limit": { "type": "integer" },
+        "label_name_length_limit": { "type": "integer" },
+        "label_value_length_limit": { "type": "integer" },
+        "proxy_url": { "type": "string" },
+        "tls_config": { "$ref": "#/definitions/tlsConfig" },
+        "authorization": { "$ref": "#/definitions/authorization" },
         "relabel_configs": {
           "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "source_labels": {
-                "type": "array",
-                "items": { "type": "string" }
-              },
-              "regex": { "type": "string" },
-              "target_label": { "type": "string" },
-              "replacement": { "type": "string" },
-              "action": { "type": "string" }
-            }
-          }
+          "items": { "$ref": "#/definitions/relabelConfig" }
+        },
+        "metric_relabel_configs": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/relabelConfig" }
+        },
+        "static_configs": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/staticConfig" }
+        },
+        "file_sd_configs": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/fileSdConfig" }
+        },
+        "kubernetes_sd_configs": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/kubernetesSdConfig" }
+        },
+        "consul_sd_configs": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/consulSdConfig" }
+        },
+        "dns_sd_configs": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/dnsSdConfig" }
+        },
+        "azure_sd_configs": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/azureSdConfig" }
+        },
+        "marathon_sd_configs": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/marathonSdConfig" }
+        },
+        "nerve_sd_configs": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/nerveSdConfig" }
+        },
+        "serverset_sd_configs": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/serversetSdConfig" }
+        },
+        "ec2_sd_configs": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/ec2SdConfig" }
+        },
+        "openstack_sd_configs": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/openstackSdConfig" }
+        },
+        "gce_sd_configs": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/gceSdConfig" }
+        },
+        "triton_sd_configs": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/tritonSdConfig" }
+        },
+        "hetzner_sd_configs": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/hetznerSdConfig" }
+        }
+      },
+      "required": ["job_name"]
+    }
+  },
+  "required": ["apiVersion", "kind", "metadata", "spec"],
+  "definitions": {
+    "tlsConfig": {
+      "type": "object",
+      "properties": {
+        "ca_file": { "type": "string" },
+        "cert_file": { "type": "string" },
+        "key_file": { "type": "string" },
+        "server_name": { "type": "string" },
+        "insecure_skip_verify": { "type": "boolean" }
+      }
+    },
+    "authorization": {
+      "type": "object",
+      "properties": {
+        "type": { "type": "string" },
+        "credentials": { "type": "string" }
+      }
+    },
+    "relabelConfig": {
+      "type": "object",
+      "properties": {
+        "source_labels": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "separator": { "type": "string" },
+        "target_label": { "type": "string" },
+        "regex": { "type": "string" },
+        "modulus": { "type": "integer" },
+        "replacement": { "type": "string" },
+        "action": { "type": "string" }
+      }
+    },
+    "staticConfig": {
+      "type": "object",
+      "properties": {
+        "targets": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "labels": { "type": "object" }
+      }
+    },
+    "fileSdConfig": {
+      "type": "object",
+      "properties": {
+        "files": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "refresh_interval": { "type": "string" }
+      }
+    },
+    "kubernetesSdConfig": {
+      "type": "object",
+      "properties": {
+        "role": { "type": "string" },
+        "selectors": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/selector" }
+        },
+        "namespaces": { "$ref": "#/definitions/namespace" }
+      }
+    },
+    "consulSdConfig": {
+      "type": "object",
+      "properties": {
+        "server": { "type": "string" },
+        "services": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "tag_separator": { "type": "string" },
+        "scheme": { "type": "string" },
+        "allow_stale": { "type": "boolean" },
+        "token": { "type": "string" },
+        "namespace": { "type": "string" }
+      }
+    },
+    "dnsSdConfig": {
+      "type": "object",
+      "properties": {
+        "names": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "refresh_interval": { "type": "string" },
+        "type": { "type": "string" },
+        "port": { "type": "integer" }
+      }
+    },
+    "azureSdConfig": {
+      "type": "object",
+      "properties": {
+        "port": { "type": "integer" },
+        "subscription_id": { "type": "string" },
+        "tenant_id": { "type": "string" },
+        "client_id": { "type": "string" },
+        "client_secret": { "type": "string" }
+      }
+    },
+    "marathonSdConfig": {
+      "type": "object",
+      "properties": {
+        "servers": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "refresh_interval": { "type": "string" },
+        "auth_token": { "type": "string" }
+      }
+    },
+    "nerveSdConfig": {
+      "type": "object",
+      "properties": {
+        "servers": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "paths": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "serversetSdConfig": {
+      "type": "object",
+      "properties": {
+        "servers": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "paths": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "ec2SdConfig": {
+      "type": "object",
+      "properties": {
+        "region": { "type": "string" },
+        "access_key": { "type": "string" },
+        "secret_key": { "type": "string" },
+        "profile": { "type": "string" },
+        "role_arn": { "type": "string" },
+        "refresh_interval": { "type": "string" }
+      }
+    },
+    "openstackSdConfig": {
+      "type": "object",
+      "properties": {
+        "identity_endpoint": { "type": "string" },
+        "username": { "type": "string" },
+        "password": { "type": "string" },
+        "tenant_name": { "type": "string" },
+        "domain_name": { "type": "string" },
+        "region": { "type": "string" },
+        "refresh_interval": { "type": "string" }
+      }
+    },
+    "gceSdConfig": {
+      "type": "object",
+      "properties": {
+        "project": { "type": "string" },
+        "zone": { "type": "string" },
+        "filter": { "type": "string" },
+        "refresh_interval": { "type": "string" }
+      }
+    },
+    "tritonSdConfig": {
+      "type": "object",
+      "properties": {
+        "account": { "type": "string" },
+        "dns_suffix": { "type": "string" },
+        "endpoint": { "type": "string" },
+        "refresh_interval": { "type": "string" },
+        "port": { "type": "integer" }
+      }
+    },
+    "hetznerSdConfig": {
+      "type": "object",
+      "properties": {
+        "datacenter": { "type": "string" },
+        "refresh_interval": { "type": "string" }
+      }
+    },
+    "selector": {
+      "type": "object",
+      "properties": {
+        "role": { "type": "string" },
+        "label_selector": { "type": "object" }
+      }
+    },
+    "namespace": {
+      "type": "object",
+      "properties": {
+        "names": {
+          "type": "array",
+          "items": { "type": "string" }
         }
       }
     }
-  },
-  "required": ["apiVersion", "kind", "metadata", "spec"]
+  }
 }
